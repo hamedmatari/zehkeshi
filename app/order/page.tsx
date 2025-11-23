@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { OrderStepper } from "@/components/OrderStepper"
 import { LocationPicker } from "@/components/LocationPicker"
@@ -15,7 +15,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react"
 
 const STEPS = ["محصول", "بستن راکت", "مکان", "زمان", "احراز هویت", "پرداخت"]
 
-export default function OrderPage() {
+function OrderPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const productId = searchParams.get("productId")
@@ -262,6 +262,29 @@ export default function OrderPage() {
         </Card>
       </main>
     </div>
+  )
+}
+
+export default function OrderPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-background">
+        <header className="border-b">
+          <div className="container mx-auto px-4 py-6">
+            <h1 className="text-3xl font-bold">ثبت سفارش</h1>
+          </div>
+        </header>
+        <main className="container mx-auto px-4 py-8 max-w-4xl">
+          <Card className="mt-8">
+            <CardContent className="p-6">
+              <p className="text-center text-muted-foreground">در حال بارگذاری...</p>
+            </CardContent>
+          </Card>
+        </main>
+      </div>
+    }>
+      <OrderPageContent />
+    </Suspense>
   )
 }
 
