@@ -3,32 +3,32 @@ import { Location } from "@/lib/types"
 export const locations: Location[] = [
   {
     id: "1",
-    name: "Downtown Tennis Center",
-    address: "123 Main Street, Downtown",
+    name: "مرکز تنیس مرکز شهر",
+    address: "خیابان اصلی ۱۲۳، مرکز شهر",
     available: true
   },
   {
     id: "2",
-    name: "Sports Complex North",
-    address: "456 Oak Avenue, North District",
+    name: "مجموعه ورزشی شمال",
+    address: "خیابان بلوط ۴۵۶، منطقه شمالی",
     available: true
   },
   {
     id: "3",
-    name: "Riverside Tennis Club",
-    address: "789 River Road, Riverside",
+    name: "باشگاه تنیس کنار رودخانه",
+    address: "خیابان رودخانه ۷۸۹، کنار رودخانه",
     available: true
   },
   {
     id: "4",
-    name: "City Park Tennis Facility",
-    address: "321 Park Boulevard, City Park",
+    name: "تسهیلات تنیس پارک شهر",
+    address: "بلوار پارک ۳۲۱، پارک شهر",
     available: true
   },
   {
     id: "5",
-    name: "Elite Sports Center",
-    address: "654 Elite Drive, Westside",
+    name: "مرکز ورزشی الیت",
+    address: "خیابان الیت ۶۵۴، غرب شهر",
     available: true
   }
 ]

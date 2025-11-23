@@ -33,13 +33,13 @@ export default function PaymentPage() {
     <div className="min-h-screen bg-background flex items-center justify-center">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-center">Processing Payment</CardTitle>
+          <CardTitle className="text-center">در حال پردازش پرداخت</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-col items-center justify-center py-8">
             <Loader2 className="w-12 h-12 animate-spin text-primary mb-4" />
             <p className="text-muted-foreground text-center">
-              Please wait while we process your payment...
+              لطفاً صبر کنید تا پرداخت شما پردازش شود...
             </p>
           </div>
         </CardContent>

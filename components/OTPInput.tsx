@@ -86,12 +86,12 @@ export function OTPInput({ onComplete, onSendOTP }: OTPInputProps) {
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="phone">Phone Number</Label>
+        <Label htmlFor="phone">شماره تلفن</Label>
         <div className="flex gap-2">
           <Input
             id="phone"
             type="tel"
-            placeholder="Enter your phone number"
+            placeholder="شماره تلفن خود را وارد کنید"
             value={phone}
             onChange={handlePhoneChange}
             maxLength={15}
@@ -101,14 +101,14 @@ export function OTPInput({ onComplete, onSendOTP }: OTPInputProps) {
             onClick={handleSendOTP}
             disabled={phone.length < 10 || isLoading || otpSent}
           >
-            {isLoading ? "Sending..." : "Send OTP"}
+            {isLoading ? "در حال ارسال..." : "ارسال کد"}
           </Button>
         </div>
       </div>
 
       {otpSent && (
         <div className="space-y-2">
-          <Label>Enter OTP Code</Label>
+          <Label>کد تأیید را وارد کنید</Label>
           <div className="flex gap-2 justify-center">
             {otp.map((digit, index) => (
               <Input
@@ -127,11 +127,11 @@ export function OTPInput({ onComplete, onSendOTP }: OTPInputProps) {
             ))}
           </div>
           <p className="text-sm text-muted-foreground text-center">
-            Enter the 6-digit code sent to your phone
+            کد ۶ رقمی ارسال شده به تلفن خود را وارد کنید
           </p>
           {isVerifying && (
             <p className="text-sm text-center text-muted-foreground">
-              Verifying...
+              در حال تأیید...
             </p>
           )}
         </div>

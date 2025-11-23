@@ -19,6 +19,12 @@ export interface Location {
   available: boolean
 }
 
+export interface LocationCoordinates {
+  lat: number
+  lng: number
+  address?: string
+}
+
 export interface Timeslot {
   date: string
   time: string
@@ -29,8 +35,10 @@ export interface Order {
   id: string
   productId: string
   locationId: string
+  locationCoordinates?: LocationCoordinates
   timeslot: Timeslot
   phone: string
+  needsStringing?: boolean
   status: "pending" | "confirmed" | "completed" | "cancelled"
   createdAt: string
 }

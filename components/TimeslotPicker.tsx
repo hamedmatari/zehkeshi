@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Timeslot } from "@/lib/types"
-import { Calendar } from "@/components/ui/calendar"
+import { PersianCalendar } from "@/components/PersianCalendar"
 import {
   Select,
   SelectContent,
@@ -59,10 +59,10 @@ export function TimeslotPicker({
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <Label>Select Date</Label>
+        <Label>انتخاب تاریخ</Label>
         <Card>
           <CardContent className="p-3">
-            <Calendar
+            <PersianCalendar
               mode="single"
               selected={selectedDate}
               onSelect={handleDateSelect}
@@ -75,13 +75,13 @@ export function TimeslotPicker({
 
       {selectedDate && (
         <div className="space-y-2">
-          <Label htmlFor="time">Select Time</Label>
+          <Label htmlFor="time">انتخاب زمان</Label>
           <Select
             value={value?.time}
             onValueChange={handleTimeSelect}
           >
             <SelectTrigger id="time" className="w-full">
-              <SelectValue placeholder="Select a time slot" />
+              <SelectValue placeholder="یک بازه زمانی انتخاب کنید" />
             </SelectTrigger>
             <SelectContent>
               {availableTimes.map((slot) => (

@@ -1,12 +1,9 @@
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
 import "./globals.css"
 
-const inter = Inter({ subsets: ["latin"] })
-
 export const metadata: Metadata = {
-  title: "Tennis Racket String Service",
-  description: "Professional tennis racket stringing service",
+  title: "سرویس بستن راکت تنیس",
+  description: "سرویس حرفه‌ای بستن راکت تنیس",
 }
 
 export default function RootLayout({
@@ -15,8 +12,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="fa" dir="rtl">
+      <body>{children}</body>
     </html>
   )
 }

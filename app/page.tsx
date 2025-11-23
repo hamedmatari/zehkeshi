@@ -6,18 +6,18 @@ export default function Home() {
     <div className="min-h-screen bg-background">
       <header className="border-b">
         <div className="container mx-auto px-4 py-6">
-          <h1 className="text-3xl font-bold">Tennis Racket String Service</h1>
+          <h1 className="text-3xl font-bold">سرویس بستن راکت تنیس</h1>
           <p className="text-muted-foreground mt-2">
-            Professional stringing service for your tennis racket
+            سرویس حرفه‌ای بستن راکت تنیس شما
           </p>
         </div>
       </header>
 
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h2 className="text-2xl font-semibold mb-2">Available Strings</h2>
+          <h2 className="text-2xl font-semibold mb-2">تارهای موجود</h2>
           <p className="text-muted-foreground">
-            Choose from our selection of premium tennis strings
+            از مجموعه تارهای باکیفیت ما انتخاب کنید
           </p>
         </div>
 

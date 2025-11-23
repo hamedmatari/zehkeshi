@@ -9,12 +9,11 @@ import { OTPInput } from "@/components/OTPInput"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { products } from "@/lib/data/products"
-import { locations } from "@/lib/data/locations"
-import { Order, Timeslot } from "@/lib/types"
+import { Order, Timeslot, LocationCoordinates } from "@/lib/types"
 import { saveOrder } from "@/lib/store/orderStore"
 import { ArrowLeft, ArrowRight } from "lucide-react"
 
-const STEPS = ["Product", "Location", "Timeslot", "Authentication", "Payment"]
+const STEPS = ["محصول", "بستن راکت", "مکان", "زمان", "احراز هویت", "پرداخت"]
 
 export default function OrderPage() {
   const router = useRouter()
@@ -25,7 +24,8 @@ export default function OrderPage() {
   const [selectedProduct, setSelectedProduct] = useState(
     productId ? products.find((p) => p.id === productId) : products[0]
   )
-  const [selectedLocation, setSelectedLocation] = useState<string>("")
+  const [needsStringing, setNeedsStringing] = useState(false)
+  const [selectedLocation, setSelectedLocation] = useState<LocationCoordinates | null>(null)
   const [selectedTimeslot, setSelectedTimeslot] = useState<Timeslot | undefined>()
   const [phone, setPhone] = useState("")
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -67,9 +67,11 @@ export default function OrderPage() {
     ) {
       const order: Partial<Order> = {
         productId: selectedProduct.id,
-        locationId: selectedLocation,
+        locationId: `lat_${selectedLocation.lat}_lng_${selectedLocation.lng}`,
+        locationCoordinates: selectedLocation,
         timeslot: selectedTimeslot,
         phone,
+        needsStringing,
         status: "pending",
         createdAt: new Date().toISOString(),
       }
@@ -83,10 +85,12 @@ export default function OrderPage() {
       case 1:
         return !!selectedProduct
       case 2:
-        return !!selectedLocation
+        return true
       case 3:
-        return !!selectedTimeslot?.date && !!selectedTimeslot?.time
+        return !!selectedLocation
       case 4:
+        return !!selectedTimeslot?.date && !!selectedTimeslot?.time
+      case 5:
         return isAuthenticated
       default:
         return false
@@ -101,7 +105,7 @@ export default function OrderPage() {
     <div className="min-h-screen bg-background">
       <header className="border-b">
         <div className="container mx-auto px-4 py-6">
-          <h1 className="text-3xl font-bold">Place Your Order</h1>
+          <h1 className="text-3xl font-bold">ثبت سفارش</h1>
         </div>
       </header>
 
@@ -115,86 +119,115 @@ export default function OrderPage() {
           <CardContent className="space-y-6">
             {currentStep === 1 && (
               <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {products.map((product) => (
-                    <Card
-                      key={product.id}
-                      className={`cursor-pointer transition-colors ${
-                        selectedProduct.id === product.id
-                          ? "border-primary border-2"
-                          : ""
-                      }`}
-                      onClick={() => setSelectedProduct(product)}
-                    >
-                      <CardContent className="p-4">
-                        <h3 className="font-semibold">{product.name}</h3>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          {product.description}
-                        </p>
-                        <p className="text-lg font-bold mt-2">
-                          ${product.price.toFixed(2)}
-                        </p>
-                      </CardContent>
-                    </Card>
-                  ))}
+                <div className="text-center">
+                  <h3 className="text-lg font-semibold mb-4">محصول انتخاب شده</h3>
+                  <Card className="max-w-md mx-auto border-primary border-2">
+                    <CardContent className="p-6">
+                      <h3 className="font-semibold text-xl mb-2">{selectedProduct.name}</h3>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        {selectedProduct.description}
+                      </p>
+                      <p className="text-2xl font-bold text-primary">
+                        ${selectedProduct.price.toFixed(2)}
+                      </p>
+                    </CardContent>
+                  </Card>
+                  <p className="text-sm text-muted-foreground mt-4">
+                    برای تغییر محصول، می‌توانید از دکمه "قبلی" استفاده کنید
+                  </p>
                 </div>
               </div>
             )}
 
             {currentStep === 2 && (
+              <div className="space-y-4">
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">آیا می‌خواهید راکت شما با تار خریداری شده بسته شود؟</h3>
+                  <p className="text-sm text-muted-foreground">
+                    اگر راکت خود را دارید و می‌خواهید با تار انتخاب شده بسته شود، این گزینه را انتخاب کنید.
+                  </p>
+                  <Card
+                    className={`cursor-pointer transition-colors ${
+                      needsStringing ? "border-primary border-2" : ""
+                    }`}
+                    onClick={() => setNeedsStringing(!needsStringing)}
+                  >
+                    <CardContent className="p-6">
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="checkbox"
+                          checked={needsStringing}
+                          onChange={() => setNeedsStringing(!needsStringing)}
+                          className="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
+                        />
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-lg">بله، می‌خواهم راکت من بسته شود</h3>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            راکت شما با تار {selectedProduct.name} بسته خواهد شد
+                          </p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+            )}
+
+            {currentStep === 3 && (
               <LocationPicker
-                locations={locations}
-                value={selectedLocation}
+                value={selectedLocation || undefined}
                 onValueChange={setSelectedLocation}
               />
             )}
 
-            {currentStep === 3 && (
+            {currentStep === 4 && (
               <TimeslotPicker
                 value={selectedTimeslot}
                 onValueChange={setSelectedTimeslot}
               />
             )}
 
-            {currentStep === 4 && (
+            {currentStep === 5 && (
               <OTPInput
                 onSendOTP={handleSendOTP}
                 onComplete={handleOTPComplete}
               />
             )}
 
-            {currentStep === 5 && (
+            {currentStep === 6 && (
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <h3 className="font-semibold">Order Summary</h3>
+                  <h3 className="font-semibold">خلاصه سفارش</h3>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Product:</span>
+                      <span className="text-muted-foreground">محصول:</span>
                       <span>{selectedProduct.name}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Price:</span>
+                      <span className="text-muted-foreground">قیمت:</span>
                       <span>${selectedProduct.price.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Location:</span>
+                      <span className="text-muted-foreground">مکان:</span>
                       <span>
-                        {
-                          locations.find((l) => l.id === selectedLocation)
-                            ?.name
-                        }
+                        {selectedLocation?.address ||
+                          `عرض: ${selectedLocation?.lat.toFixed(4)}, طول: ${selectedLocation?.lng.toFixed(4)}`}
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Date:</span>
+                      <span className="text-muted-foreground">تاریخ:</span>
                       <span>{selectedTimeslot?.date}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Time:</span>
+                      <span className="text-muted-foreground">زمان:</span>
                       <span>{selectedTimeslot?.time}</span>
                     </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">بستن راکت:</span>
+                      <span>{needsStringing ? "بله" : "خیر"}</span>
+                    </div>
                     <div className="flex justify-between font-semibold pt-2 border-t">
-                      <span>Total:</span>
+                      <span>مجموع:</span>
                       <span>${selectedProduct.price.toFixed(2)}</span>
                     </div>
                   </div>
@@ -204,7 +237,7 @@ export default function OrderPage() {
                   className="w-full"
                   size="lg"
                 >
-                  Proceed to Payment
+                  ادامه به پرداخت
                 </Button>
               </div>
             )}
@@ -215,13 +248,13 @@ export default function OrderPage() {
                 onClick={handleBack}
                 disabled={currentStep === 1}
               >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back
+                <ArrowRight className="w-4 h-4 ml-2" />
+                قبلی
               </Button>
-              {currentStep < 5 && (
+              {currentStep < 6 && (
                 <Button onClick={handleNext} disabled={!canProceed()}>
-                  Next
-                  <ArrowRight className="w-4 h-4 ml-2" />
+                  بعدی
+                  <ArrowLeft className="w-4 h-4 mr-2" />
                 </Button>
               )}
             </div>

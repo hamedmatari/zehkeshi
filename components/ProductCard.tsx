@@ -20,7 +20,7 @@ export function ProductCard({ product }: ProductCardProps) {
     <Card className="flex flex-col">
       <CardHeader>
         <div className="aspect-video w-full bg-muted rounded-md mb-4 flex items-center justify-center">
-          <span className="text-muted-foreground text-sm">Product Image</span>
+          <span className="text-muted-foreground text-sm">تصویر محصول</span>
         </div>
         <CardTitle>{product.name}</CardTitle>
         <CardDescription>{product.description}</CardDescription>
@@ -29,19 +29,19 @@ export function ProductCard({ product }: ProductCardProps) {
         <div className="space-y-2">
           {product.specs.material && (
             <div className="text-sm">
-              <span className="font-medium">Material: </span>
+              <span className="font-medium">جنس: </span>
               <span className="text-muted-foreground">{product.specs.material}</span>
             </div>
           )}
           {product.specs.gauge && (
             <div className="text-sm">
-              <span className="font-medium">Gauge: </span>
+              <span className="font-medium">ضخامت: </span>
               <span className="text-muted-foreground">{product.specs.gauge}</span>
             </div>
           )}
           {product.specs.tension && (
             <div className="text-sm">
-              <span className="font-medium">Tension: </span>
+              <span className="font-medium">کشش: </span>
               <span className="text-muted-foreground">{product.specs.tension}</span>
             </div>
           )}
@@ -49,7 +49,7 @@ export function ProductCard({ product }: ProductCardProps) {
       </CardContent>
       <CardFooter className="flex justify-between items-center">
         <div className="text-2xl font-bold">${product.price.toFixed(2)}</div>
-        <Button onClick={handleSelect}>Select</Button>
+        <Button onClick={handleSelect}>انتخاب</Button>
       </CardFooter>
     </Card>
   )
